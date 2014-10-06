@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Diagnostics.Contracts;
+//using System.Diagnostics.Contracts;
 using System.Drawing;
 using System.Windows;
 using System.Linq;
@@ -56,14 +56,14 @@ namespace GraphSharp.Controls
         where TGraph : class, IBidirectionalGraph<TVertex, TEdge>
     {
         protected readonly Dictionary<TEdge, EdgeControl> _edgeControls = new Dictionary<TEdge, EdgeControl>();
-        private readonly Queue<TEdge> _edgesAdded = new Queue<TEdge>();
-        private readonly Queue<TEdge> _edgesRemoved = new Queue<TEdge>();
+        private readonly HashSet<TEdge> _edgesAdded = new HashSet<TEdge>();
+        private readonly HashSet<TEdge> _edgesRemoved = new HashSet<TEdge>();
         private readonly List<LayoutState<TVertex, TEdge>> _layoutStates = new List<LayoutState<TVertex, TEdge>>();
         private readonly TimeSpan _notificationLayoutDelay = new TimeSpan(0, 0, 0, 0, 5); // 5 ms
         private readonly object _notificationSyncRoot = new object();
         protected readonly Dictionary<TVertex, VertexControl> _vertexControls = new Dictionary<TVertex, VertexControl>();
-        private readonly Queue<TVertex> _verticesAdded = new Queue<TVertex>();
-        private readonly Queue<TVertex> _verticesRemoved = new Queue<TVertex>();
+        private readonly HashSet<TVertex> _verticesAdded = new HashSet<TVertex>();
+        private readonly HashSet<TVertex> _verticesRemoved = new HashSet<TVertex>();
         private readonly Stopwatch stopWatch = new Stopwatch();
         private DateTime _lastNotificationTimestamp = DateTime.Now;
 

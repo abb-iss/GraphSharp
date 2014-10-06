@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using QuickGraph;
-using System.Diagnostics.Contracts;
+//using System.Diagnostics.Contracts;
 using System.Diagnostics;
 
 namespace GraphSharp.Algorithms.Layout.Compound.FDP

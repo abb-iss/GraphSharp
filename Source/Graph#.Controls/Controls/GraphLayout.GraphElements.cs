@@ -138,23 +138,27 @@ namespace GraphSharp.Controls
         {
             while (_edgesRemoved.Count > 0)
             {
-                var edge = _edgesRemoved.Dequeue();
+                var edge = _edgesRemoved.First();
+                _edgesRemoved.Remove(edge);
                 RemoveEdgeControl(edge);
             }
             while (_verticesRemoved.Count > 0)
             {
-                var vertex = _verticesRemoved.Dequeue();
+                var vertex = _verticesRemoved.First();
+                _verticesRemoved.Remove(vertex);
                 RemoveVertexControl(vertex);
             }
             var verticesToInitPos = _verticesAdded.ToList();
             while (_verticesAdded.Count > 0)
             {
-                var vertex = _verticesAdded.Dequeue();
+                var vertex = _verticesAdded.First();
+                _verticesAdded.Remove(vertex);
                 CreateVertexControl(vertex);
             }
             while (_edgesAdded.Count > 0)
             {
-                var edge = _edgesAdded.Dequeue();
+                var edge = _edgesAdded.First();
+                _edgesAdded.Remove(edge);
                 CreateEdgeControl(edge);
             }
             foreach (var vertex in verticesToInitPos)
@@ -165,31 +169,41 @@ namespace GraphSharp.Controls
 
         private void OnMutableGraph_EdgeRemoved(TEdge edge)
         {
-            if (_edgeControls.ContainsKey(edge))
-            {
-                _edgesRemoved.Enqueue(edge);
-                DoNotificationLayout();
+            if(_edgesAdded.Contains(edge)) {
+                _edgesAdded.Remove(edge);
+            } else {
+                _edgesRemoved.Add(edge);
             }
+            DoNotificationLayout();
         }
 
         private void OnMutableGraph_EdgeAdded(TEdge edge)
         {
-            _edgesAdded.Enqueue(edge);
+            if(_edgesRemoved.Contains(edge)) {
+                _edgesRemoved.Remove(edge);
+            } else {
+                _edgesAdded.Add(edge);
+            }
             DoNotificationLayout();
         }
 
         private void OnMutableGraph_VertexRemoved(TVertex vertex)
         {
-            if (_vertexControls.ContainsKey(vertex))
-            {
-                _verticesRemoved.Enqueue(vertex);
-                DoNotificationLayout();
+            if(_verticesAdded.Contains(vertex)) {
+                _verticesAdded.Remove(vertex);
+            } else {
+                _verticesRemoved.Add(vertex);
             }
+            DoNotificationLayout();
         }
 
         private void OnMutableGraph_VertexAdded(TVertex vertex)
         {
-            _verticesAdded.Enqueue(vertex);
+            if(_verticesRemoved.Contains(vertex)) {
+                _verticesRemoved.Remove(vertex);
+            } else {
+                _verticesAdded.Add(vertex);
+            }
             DoNotificationLayout();
         }
 
